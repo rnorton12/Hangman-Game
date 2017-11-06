@@ -20,8 +20,7 @@ var usaStates = [
 ];
 
 // initialize some variables for start of game
-var winsCount = 0;
-var html;
+var winCount = 0;
 var letter;
 var solved; // the user guessed the word before exhausting number of guesses
 var wordPlaceHolder;
@@ -30,6 +29,7 @@ var hangManWord;
 var solvedWord;
 var gameStarted = false;
 var lettersGuessed = [];
+var underScore = "_";
 
 document.onkeyup = function (event) {
     // Capture the key press, convert it to lowercase, and save it to a variable.
@@ -41,6 +41,7 @@ document.onkeyup = function (event) {
     } else {
         guessWord();
     }
+    updateWebPage();
 
     // has the user exhausted guessesRemaining or
     // solved the word?
@@ -48,7 +49,7 @@ document.onkeyup = function (event) {
         if (solved) {
             console.log("you Won");
             // increment wins by 1 and
-            winsCount++;
+            winCount++;
         } else { // guessesRemain equals 0
             // you lost
             console.log("You Lost");
@@ -69,8 +70,8 @@ function startGame () { // initial key press to start the game
     // This will be the word that the user has to solve.
     hangManWord = usaStates[Math.floor(Math.random() * usaStates.length)];
 
-    // fill the solved word with "#" to the length of the hangManWord
-    solvedWord = fillString("#", hangManWord.length);
+    // fill the solved word with "_" to the length of the hangManWord
+    solvedWord = fillString(underScore, hangManWord.length);
 
     // if the hangManWord contains any spaces then account for those
     var indices = [];
@@ -94,22 +95,7 @@ function startGame () { // initial key press to start the game
     console.log("the solvedWord is: " + solvedWord);
     console.log("length of word is: " + solvedWord.length);
        
-    for (var i = 0; i < hangManWord.length; i++) {
-        // create a placeholder for each letter of the current word.
-        wordPlaceHolder += '_';
-
-        if (i < hangManWord.length -1) {
-            wordPlaceHolder += ' ';
-        }
-    }
-
-    // construct the html for the word place holder
-    console.log("wordPlaceHolder: " + wordPlaceHolder);
-    html = "<p>" + wordPlaceHolder + "</p>";
-    console.log("html: " + html);
-
-    // Set the inner HTML contents of the #currentWord div to our html string
-    document.querySelector("#currentWord").innerHTML = html;
+    
 
 } // end outer document.onkeyup = function(event) {
 
@@ -152,23 +138,6 @@ function guessWord() {
         // letter was not found, decrement guessesRemaining by 1
         guessesRemaining -= 1;
     }
-    
-    
-/*
-    console.log("pos: " + pos);
-    if (pos !== -1) { // correct guess
-        console.log("position of letter in handManWord is: " + pos);
-        if ((pos === 0) || (pos === hangManWord.length)) { // first letter or last letter
-            wordPlaceHolder[pos] = letter; 
-        } else { // have to account for spaces between letters
-            wordPlaceHolder[pos + 1];
-        }
-        html = "<p>" + wordPlaceHolder + "</p>";
-        console.log("html: " + html);
-    } else { // incorrect guess 
-        guessesRemaining -= 1;
-    }   
-    */ 
 }
 
 function fillString(withChar, length) {
@@ -186,28 +155,23 @@ function setCharAt(str,index,chr) {
     return str.substr(0,index) + chr + str.substr(index+1);
 }
 
-// 2) then need to display a place holder for each letter in the state selected
-// like this: _ _ _ _ _
+function updateWebPage() {
+    var html;
 
-// 3) get a letter guess from the user from A to Z.
+    html = "<p>" + solvedWord + "</p>";
+    document.querySelector("#currentWord").innerHTML = html;
+    console.log("html: " + html);
+    
+    html = "<p>" + "Wins: " + winCount + "</p>";
+    document.querySelector("#winCount").innerHTML = html;
 
-// 4) if the letter guessed is contained in the current word then,
-// replace the letter place holder at the appropriate position with the current letter.
-
-// 5) if the letter guessed is NOT contained in the current word then,
-// subtract 1 from the number of guesses remaining.
-
-// 6) add the letter selected to the letter already guessed display area.
-
-// 7) has the user solved the puzzle?
-// if yes then,
-// add 1 to the number of wins then,
-// go back to step 1 to prepare for next game
-// if no then,
-// continue
-
-// 7) if the number of guesses remaining is not 0,
-// then go back to step 3.
-
-// 8) if the number of guesses remaining is 0,
-// then go back to step 1.
+    html = "<p>" + "Guesses Remaining: " + guessesRemaining + "</p>";
+    document.querySelector("#guessesRemaining").innerHTML = html;
+    
+    html = "<p>" + "Letters Guessed: ";
+    if (lettersGuessed.length) {
+       html += lettersGuessed.toString();
+    }
+    html += "</p>";
+    document.querySelector("#lettersGuessed").innerHTML = html;
+}
