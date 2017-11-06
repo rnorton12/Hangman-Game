@@ -22,14 +22,14 @@ var usaStates = [
 // initialize some variables for start of game
 var winCount = 0;
 var letter;
-var solved; // the user guessed the word before exhausting number of guesses
-var wordPlaceHolder;
+var solved; // the user guessed the word before exhausting number of guesse
 var guessesRemaining;
 var hangManWord;
-var solvedWord;
+var solvedWord = "";;
 var gameStarted = false;
 var lettersGuessed = [];
 var underScore = "_";
+var space = " ";
 
 document.onkeyup = function (event) {
     // Capture the key press, convert it to lowercase, and save it to a variable.
@@ -63,9 +63,9 @@ document.onkeyup = function (event) {
 function startGame () { // initial key press to start the game
         
     guessesRemaining = 12;
-    wordPlaceHolder = "";
     solved = false;
     gameStarted = true;
+    lettersGuessed.length = 0;
     // Randomly chooses a state from the options usaStates array.
     // This will be the word that the user has to solve.
     hangManWord = usaStates[Math.floor(Math.random() * usaStates.length)];
@@ -76,7 +76,6 @@ function startGame () { // initial key press to start the game
     // if the hangManWord contains any spaces then account for those
     var indices = [];
     var pos = 0;
-    var space = " ";
 
     while ((pos = hangManWord.toLowerCase().indexOf(space, pos)) !== -1) {
         indices.push(pos);
@@ -106,13 +105,15 @@ function guessWord() {
     // if letter has already been used don't count it
     pos = lettersGuessed.indexOf(letter.toLowerCase());
     if (pos !== -1) {
+        html = "<P>" + "you already tried the letter " + letter + " ." + "</p>";
         console.log("you already tried this letter.");
     } else {
         // add this letter to the letterGuessed array
-        lettersGuessed.push(letter);
-    }  
-    
-   
+        lettersGuessed.push(letter.toLowerCase());
+        html = "";
+    }
+    document.querySelector("#guessedLetterRepeated").innerHTML = html;
+       
     // does the letter exist in the hangManWord?
     var indices = [];
     pos = 0;
@@ -158,10 +159,24 @@ function setCharAt(str,index,chr) {
 function updateWebPage() {
     var html;
 
-    html = "<p>" + solvedWord + "</p>";
+    console.log("solvedWord.length: " + solvedWord.length);
+    html = "<span>"; // open tag
+    for (var i = 0; i < solvedWord.length; i++) {
+        if ( i === 0 ) { // first letter of word
+            html += solvedWord.charAt(i) + "*";
+          } else if (i === solvedWord.length - 1) { // last letter
+            html += "*" + solvedWord.charAt(i);
+        } else if (solvedWord.charAt(i) != space) { // letter between first and last in word
+            html += solvedWord.charAt(i) + "*";   
+        } else { // this is a space in the word, add additional space for display
+            html += "*" + "*" + solvedWord.charAt(i);
+            console.log("found a space");
+        }
+    }
+    html += "</span>"; // add closing tag
     document.querySelector("#currentWord").innerHTML = html;
     console.log("html: " + html);
-    
+
     html = "<p>" + "Wins: " + winCount + "</p>";
     document.querySelector("#winCount").innerHTML = html;
 

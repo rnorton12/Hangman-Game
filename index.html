@@ -14,23 +14,27 @@
 
   </head>
   <body>
-    <div class="jumbotron">
-      <h1 class="display-3">H A N G M A N</h1>
-      <p class="lead">In this game you will try to guess the 1 of the 50 states of the United States of America (USA).</p>
-      <hr class="my-4">
-      <p>Press any key to begin1</p>
-      <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-      </p>
+    <div class="jumbotron-fluid bg-success text-white">
+      <h1 class="display-3 text-center font-weight-bold">H A N G M A N</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <img src="./assets/images/usaMap.png" class="img-fluid float-left" alt="USA Map">
+          </div>
+          <div class="col-md-4">
+              <p>Press any key to begin</p>
+              <div id="currentWord"></div>
+              <div id="winCount"></div>
+              <div id="guessesRemaining"></div>
+              <div id="lettersGuessed"></div>
+              <div id="guessedLetterRepeated"></div>
+          </div>
+          <div class="col-md-4">
+              <a href="https://placeholder.com"><img src="http://via.placeholder.com/150x150"></a>
+          </div>
+        </div>
+      </div> 
+      <p class="lead">In this game you will try to guess the 1 of the 50 states of the United States of America (USA).</p>     
     </div>
-
-    <h1>Hangman</h1>
-    <h2>Press any key to begin!
-    </h2>
-    <h3>What is the state? Enter a letter.</h3>
-    <div id="currentWord"></div>
-    <div id="winCount"></div>
-    <div id="guessesRemaining"></div>
-    <div id="lettersGuessed"></div>
   </body>
 </html>
