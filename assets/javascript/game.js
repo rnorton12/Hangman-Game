@@ -6,7 +6,7 @@
 // 5) letter already guessed
 // ======================================================
 
- // define variables
+ // define array containing each state of the union
  var usaStates = [
     "Alabama", "Arizona","Alaska", "Arkansas", "California",
     "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
@@ -36,6 +36,7 @@ var startGameStr = "Press Any Key to Begin!";
 var youWonStr = "You Won!";
 var youLostStr = "You Lost!";
 var notLetterStr = "The keypress is not a letter. Try again.";
+var repeatedLetterStr = "You already tried the letter: ";
 
 // initialize the display when the window is loaded
 window.onload = function () {
@@ -155,7 +156,7 @@ function guessWord() {
         snd = new Audio("./assets/sounds/RepeatedLetter.mp3"); // buffers automatically when created
         snd.play();
 
-        html = "<P>" + "you already tried the letter " + letter.toUpperCase() + " ." + "</p>";
+        html = "<P>" + repeatedLetterStr + letter.toUpperCase() + " ." + "</p>";
         document.querySelector("#guessedLetterRepeated").innerHTML = html;
         console.log("you already tried this letter.");
     } else {
@@ -258,8 +259,8 @@ function updateWebPage() {
 
 // The following hangman code was taken from CodePen and modified for
 // my own use.  Original author is Cathy Dutton. 
-// Animate man
 
+// draw hangman
 var animate = function () {
     var drawMe = guessesRemaining;
     drawArray[drawMe]();
