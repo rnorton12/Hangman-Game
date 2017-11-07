@@ -37,6 +37,11 @@ var youWonStr = "You Won!";
 var youLostStr = "You Lost!";
 var notLetterStr = "The keypress is not a letter. Try again.";
 var repeatedLetterStr = "You already tried the letter: ";
+var repeatedLetterSnd = new Audio("./assets/sounds/RepeatedLetter.mp3"); // buffers automatically when created
+var correctLetterSnd = new Audio("./assets/sounds/CorrectLetter.mp3"); // buffers automatically when created
+var wrongLetterSnd = new Audio("./assets/sounds/WrongLetter.mp3"); // buffers automatically when created
+var youWinSnd = new Audio("./assets/sounds/YouWin.mp3"); // buffers automatically when created
+var youLostSnd = new Audio("./assets/sounds/YouLost.mp3"); // buffers automatically when created
 
 // initialize the display when the window is loaded
 window.onload = function () {
@@ -82,8 +87,7 @@ document.onkeyup = function (event) {
             document.querySelector("#multiPurposeText").innerHTML = html;
 
             // play a sound
-            snd = new Audio("./assets/sounds/YouWin.mp3"); // buffers automatically when created
-            snd.play();
+            youWinSnd.play();
             console.log("you Won");
             // increment wins by 1 and
             winCount++;
@@ -93,8 +97,7 @@ document.onkeyup = function (event) {
             document.querySelector("#multiPurposeText").innerHTML = html;
 
             //play a sound
-            snd = new Audio("./assets/sounds/YouLost.mp3"); // buffers automatically when created
-            snd.play();
+            youLostSnd.play();
             console.log("You Lost");
         }
         
@@ -153,8 +156,7 @@ function guessWord() {
     pos = lettersGuessed.indexOf(letter.toLowerCase());
     if (pos !== -1) {
         //play a sound
-        snd = new Audio("./assets/sounds/RepeatedLetter.mp3"); // buffers automatically when created
-        snd.play();
+        repeatedLetterSnd.play();
 
         html = "<P>" + repeatedLetterStr + letter.toUpperCase() + " ." + "</p>";
         document.querySelector("#guessedLetterRepeated").innerHTML = html;
@@ -180,8 +182,7 @@ function guessWord() {
         if (indices.length) {
             console.log("indices = " + indices.toString());
             //play a sound
-            snd = new Audio("./assets/sounds/CorrectLetter.mp3"); // buffers automatically when created
-            snd.play();
+            correctLetterSnd.play();
             // add the letter to solvedWord at the appropriate position
             for (var i = 0; i < indices.length; i++) {
                 solvedWord = setCharAt(solvedWord, indices[i], hangManWord.charAt(indices[i])); 
@@ -194,8 +195,7 @@ function guessWord() {
             }
         } else {
             //play a sound
-            snd = new Audio("./assets/sounds/WrongLetter.mp3"); // buffers automatically when created
-            snd.play();
+            wrongLetterSnd.play();
 
             console.log("not found");
             // letter was not found, decrement guessesRemaining by 1
