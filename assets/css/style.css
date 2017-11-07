@@ -6,14 +6,12 @@ pre {
 }
 
 canvas{
-  float: right;
   width: 200px;
   height: 150px;
   color: white;
-  border: white dashed 2px;
-  padding: 15px;
 }
 
 .jumbotron-fluid{
   height: 100vh;
 }
+

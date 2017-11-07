@@ -26,7 +26,7 @@ var letter;
 var solved; // the user guessed the word before exhausting number of guesse
 var guessesRemaining;
 var hangManWord;
-var solvedWord = "";;
+var solvedWord = "";
 var gameStarted = false;
 var lettersGuessed = [];
 var underScore = "_";
@@ -34,12 +34,13 @@ var space = " ";
 var html = "";
 var startGameStr = "Press Any Key to Begin!";
 var youWonStr = "You Won!";
-var youLostStr = "You Lost!"
+var youLostStr = "You Lost!";
+var notLetterStr = "The keypress is not a letter. Try again.";
 
 // initialize the display when the window is loaded
 window.onload = function () {
     html = "<P>" + startGameStr + "</p>";
-    document.querySelector("#multipurposeText").innerHTML = html;
+    document.querySelector("#multiPurposeText").innerHTML = html;
 }
 
 // get a keypress from the user
@@ -52,9 +53,24 @@ document.onkeyup = function (event) {
         canvas();
         console.log("Starting New Game");
     } else {
-        guessWord();
+        // clear the multiPurposeText area
+        html = "<P>" + "</p>";
+        document.querySelector("#multiPurposeText").innerHTML = html;
+
+        // test of keypress is alphabetic
+        if ((event.keyCode >= 65) && (event.keyCode <= 90) || 
+            (event.keyCode >= 97) && (event.keyCode <= 122)) 
+        {
+            // the key pressed was alphabetic        
+            guessWord();
+        } else {
+            // the keypress was not alphabetic
+            html = "<P>" + notLetterStr + "</p>";
+            document.querySelector("#multiPurposeText").innerHTML = html;
+        }
     }
     updateWebPage();
+    var snd;
 
     // has the user exhausted guessesRemaining or
     // solved the word?
@@ -62,14 +78,22 @@ document.onkeyup = function (event) {
         if (solved) {
             html = "<P>" + youWonStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
-            document.querySelector("#multipurposeText").innerHTML = html;
+            document.querySelector("#multiPurposeText").innerHTML = html;
+
+            // play a sound
+            snd = new Audio("./assets/sounds/YouWin.mp3"); // buffers automatically when created
+            snd.play();
             console.log("you Won");
             // increment wins by 1 and
             winCount++;
         } else { // guessesRemain equals 0
             html = "<P>" + youLostStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
-            document.querySelector("#multipurposeText").innerHTML = html;
+            document.querySelector("#multiPurposeText").innerHTML = html;
+
+            //play a sound
+            snd = new Audio("./assets/sounds/YouLost.mp3"); // buffers automatically when created
+            snd.play();
             console.log("You Lost");
         }
         
@@ -87,7 +111,7 @@ function startGame() { // initial key press to start the game
 
     // clear the multipurpose text area
     html = "<P>" + "</p>";
-    document.querySelector("#multipurposeText").innerHTML = html;
+    document.querySelector("#multiPurposeText").innerHTML = html;
 
     // Randomly chooses a state from the options usaStates array.
     // This will be the word that the user has to solve.
@@ -115,63 +139,67 @@ function startGame() { // initial key press to start the game
     console.log("length of word is: " + hangManWord.length); 
 
     console.log("the solvedWord is: " + solvedWord);
-    console.log("length of word is: " + solvedWord.length);
-       
-    
+    console.log("length of word is: " + solvedWord.length);  
 
-} // end outer document.onkeyup = function(event) {
+} // end document.onkeyup = function(event) {
 
 function guessWord() {
     var pos = 0;
-
-    // test of keypress is alphanumeric
-    if(event.keyCode >= 48 && event.keyCode <= 90) {
-        //the key pressed was alphanumeric
+   
+    console.log("You guessed the letter: " + letter);
     
-        console.log("You guessed the letter: " + letter);
+    // if letter has already been used don't count it
+    pos = lettersGuessed.indexOf(letter.toLowerCase());
+    if (pos !== -1) {
+        //play a sound
+        snd = new Audio("./assets/sounds/RepeatedLetter.mp3"); // buffers automatically when created
+        snd.play();
+
+        html = "<P>" + "you already tried the letter " + letter.toUpperCase() + " ." + "</p>";
+        document.querySelector("#guessedLetterRepeated").innerHTML = html;
+        console.log("you already tried this letter.");
+    } else {
+        // add this letter to the letterGuessed array
+        lettersGuessed.push(letter.toLowerCase());
+
+        // clear #guessedLetterRepeated
+        html = "";
+        document.querySelector("#guessedLetterRepeated").innerHTML = html;
         
-        // if letter has already been used don't count it
-        pos = lettersGuessed.indexOf(letter.toLowerCase());
-        if (pos !== -1) {
-            html = "<P>" + "you already tried the letter " + letter.toUpperCase() + " ." + "</p>";
-            document.querySelector("#guessedLetterRepeated").innerHTML = html;
-            console.log("you already tried this letter.");
+        // does the letter exist in the hangManWord?
+        var indices = [];
+        pos = 0;
+        while ((pos = hangManWord.toLowerCase().indexOf(letter.toLowerCase(), pos)) !== -1) {
+            indices.push(pos);
+            pos++;
+        }
+
+        // need to check if the letter was already guessed
+        
+        if (indices.length) {
+            console.log("indices = " + indices.toString());
+            //play a sound
+            snd = new Audio("./assets/sounds/CorrectLetter.mp3"); // buffers automatically when created
+            snd.play();
+            // add the letter to solvedWord at the appropriate position
+            for (var i = 0; i < indices.length; i++) {
+                solvedWord = setCharAt(solvedWord, indices[i], hangManWord.charAt(indices[i])); 
+            }
+            console.log("solvedWord: " + solvedWord);
+
+            // see if the user guessed all the letters
+            if (solvedWord === hangManWord) {
+                solved = true;
+            }
         } else {
-            // add this letter to the letterGuessed array
-            lettersGuessed.push(letter.toLowerCase());
+            //play a sound
+            snd = new Audio("./assets/sounds/WrongLetter.mp3"); // buffers automatically when created
+            snd.play();
 
-            // clear #guessedLetterRepeated
-            html = "";
-            document.querySelector("#guessedLetterRepeated").innerHTML = html;
-            
-            // does the letter exist in the hangManWord?
-            var indices = [];
-            pos = 0;
-            while ((pos = hangManWord.toLowerCase().indexOf(letter.toLowerCase(), pos)) !== -1) {
-                indices.push(pos);
-                pos++;
-            }
-
-            // need to check if the letter was already guessed
-            
-            if (indices.length) {
-                console.log("indices = " + indices.toString());
-                // add the letter to solvedWord at the appropriate position
-                for (var i = 0; i < indices.length; i++) {
-                    solvedWord = setCharAt(solvedWord, indices[i], hangManWord.charAt(indices[i])); 
-                }
-                console.log("solvedWord: " + solvedWord);
-
-                // see if the user guessed all the letters
-                if (solvedWord === hangManWord) {
-                    solved = true;
-                }
-            } else {
-                console.log("not found");
-                // letter was not found, decrement guessesRemaining by 1
-                guessesRemaining -= 1;
-                animate();
-            }
+            console.log("not found");
+            // letter was not found, decrement guessesRemaining by 1
+            guessesRemaining -= 1;
+            animate();
         }
     }
 }
@@ -231,6 +259,7 @@ function updateWebPage() {
 // The following hangman code was taken from CodePen and modified for
 // my own use.  Original author is Cathy Dutton. 
 // Animate man
+
 var animate = function () {
     var drawMe = guessesRemaining;
     drawArray[drawMe]();

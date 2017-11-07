@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-    <title>Roy Norton: Hangman</title>
-  
-      <!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-      crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
 
-    <script type="text/javascript" src="./assets/javascript/game.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  </head>
-  <body>
-    <div class="jumbotron-fluid bg-success text-white">
-      <h1 class="text-center font-weight-bold">H A N G M A N</h1>
-      <div class="container">
-        <div class="row">
-            <p class="lead">In this game you will try to guess the 1 of the 50 states of the United States of America (USA).</p>
-          <div class="col-md-3">
-            <img src="./assets/images/usaMap.png" class="img-fluid float-left" alt="USA Map" width="200px" height="200px">
-          </div>
-          <div class="col-md-6 text-white">
-              <div id="multipurposeText" class="text-left"></div>
-              <br>
-              <div id="currentWord"></div>
-              <div id="winCount"></div>
-              <div id="guessesRemaining"></div>
-              <div id="lettersGuessed"></div>
-              <div id="guessedLetterRepeated" class="text-left"></div>
-          </div>
-          <div class="col-md-3">
-            <canvas id="stickman">
-              This Text will show if the Browser does NOT support HTML5 Canvas tag
-            </canvas>
-          </div>
+  <title>Roy Norton: Hangman</title>
+
+  <!-- Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+    crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+
+  <script type="text/javascript" src="./assets/javascript/game.js"></script>
+
+</head>
+
+<body class="bg-success">
+  <div class="jumbotron-fluid bg-success text-white">
+    <h1 class="text-center font-weight-bold">HANGMAN - STATES</h1>
+    <div class="container-fluid">
+      <p class="lead text-center">In this game you will try to guess the 1 of the 50 states of the United States of America (USA).</p>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <img src="./assets/images/usaMap.png" class="img-fluid" alt="USA Map" width="200px" height="200px"/>
         </div>
-      </div> 
+      </div>
     </div>
-  </body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="multiPurposeText" class="text-center"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 float-right">
+          <canvas id="stickman">
+            <p>HangMan</p>>
+          </canvas>
+        </div>
+        <div class="col-md-6 float-right">
+          <div id="currentWord"></div>
+          <div id="winCount"></div>
+          <div id="guessesRemaining"></div>
+          <div id="lettersGuessed"></div>
+          <div id="guessedLetterRepeated" class="text-left"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>
