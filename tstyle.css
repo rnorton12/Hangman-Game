@@ -1,0 +1,41 @@
+pre {
+  color: white;
+  font-family: sans-serif;
+  font-weight: bolder;
+  font-size: 16px;
+}
+.h, .g, .n3, .t1, .a4 {
+  color: red;
+}
+　
+.a1, .m, .dash, .a3, .s2 {
+  color: white;
+}
+　
+.n1, .a2, .s1, .t2 {
+  color: blue;
+}
+ 
+canvas{
+  width: 200px;
+  height: 150px;
+  color: white;
+}
+　
+.jumbotron-fluid{
+  height: 100vh;
+}
+　
+.footer {
+  width: 100%; 
+　
+  min-height: 89px; 
+  line-height: 60px;
+}
+　
+.wrap {
+  min-height: calc(100vh - 89px); 
+}
+
+　
+　
