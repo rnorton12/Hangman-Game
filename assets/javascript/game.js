@@ -216,11 +216,14 @@ function fillString(withChar, length) {
 }
 
 // the following code snippet taken from StackOverflow.com
+// will set the character chr at the index in the string str
+// and return str
 function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substr(0,index) + chr + str.substr(index+1);
 }
 
+// update the web page displayed items
 function updateWebPage() {
     
     console.log("solvedWord.length: " + solvedWord.length);
@@ -291,12 +294,10 @@ draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
 }
 
 frame1 = function() {
-   // draw (0, 150, 150, 150);
     draw (0, 120, 120, 120);
 };
 
 frame2 = function() {
-   // draw (10, 0, 10, 600);
     draw (10, 0, 10, 120);
 };
 
@@ -328,5 +329,6 @@ leftLeg = function() {
     draw (60, 70, 20, 100);
 };
 
+// hangman parts
 var drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head, frame4, frame3, frame2, frame1]; 
     
