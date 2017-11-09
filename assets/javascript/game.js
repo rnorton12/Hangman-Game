@@ -2,7 +2,7 @@
 // 1) Press any key to get started!
 // 2) Number of Wins
 // 3) current word with place holders for each letter in the word: _ _ _ _ _ _
-// 4) Number of guesses remaining start at 12
+// 4) Number of guesses remaining start at 10
 // 5) letter already guessed
 // ======================================================
 
@@ -102,7 +102,7 @@ document.onkeyup = function (event) {
             winCount++;
 
             // animate the Title
-            animateTitle();
+           // animateTitle();
         } else { // guessesRemain equals 0
             html = "<P style='color:red;font-weight:bolder;'>" + youLostStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
