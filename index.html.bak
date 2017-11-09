@@ -16,8 +16,7 @@
 
 </head>
 
-<body>
-<div class="wrap">
+<body class="bg-success">
   <div class="jumbotron-fluid bg-success text-white">
     <h1 class="text-center font-weight-bold">
       <img src="./assets/images/usaamericanflag3_13056.gif" class="img-fluid mr-4" alt="USA Flag GIF Left" width="50px" height="50px"/>
@@ -68,21 +67,17 @@
           <div id="guessedLetterRepeated" class="text-left"></div>
         </div>
       </div>
-      </div>
-      </div>
-      </div>
       <!-- begin footer -->
-  
-  
-      <div class="footer bg-dark text-center text-white">
+  <div class="row">
+    <div class="col-12 text-white bg-dark text-center">
+      <div class="footer">
         <span>© 2017: Roy Norton</span>
       </div>
-    
-
+    </div>
+  </div>
   <!-- end footer -->
-    
-  
- 
+    </div>
+  </div>
 </body>
 
 </html>

@@ -20,6 +20,15 @@
     "Virginia", "Washington", "West Virginia", "Wisconsin","Wyoming"
 ];
 
+var hangManTitleIds = [ // ids for each letter in HangMan title in html document
+    "h","a1","n1","g","m","a2","n3","dash","s1","t1","a3","t2","a4","s2" 
+];
+
+// RGB settings for Red, White and Blue
+var rgbColorRed = "rgb(255, 0, 0)";
+var rgbColorWhite = "rgb(255, 255, 255)";
+var rgbColorBlue = "rgb(0, 0, 255)";
+
 // initialize some variables for start of game
 var winCount = 0;
 var letter;
@@ -82,7 +91,7 @@ document.onkeyup = function (event) {
     // solved the word?
     if ((solved) || (guessesRemaining === 0)) {
         if (solved) {
-            html = "<P>" + youWonStr.toUpperCase() + "</p>";
+            html = "<P style='color:blue;font-weight: bolder;'>" + youWonStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
             document.querySelector("#multiPurposeText").innerHTML = html;
 
@@ -91,8 +100,11 @@ document.onkeyup = function (event) {
             console.log("you Won");
             // increment wins by 1 and
             winCount++;
+
+            // animate the Title
+            animateTitle();
         } else { // guessesRemain equals 0
-            html = "<P>" + youLostStr.toUpperCase() + "</p>";
+            html = "<P style='color:red;font-weight:bolder;'>" + youLostStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
             document.querySelector("#multiPurposeText").innerHTML = html;
 
@@ -139,12 +151,6 @@ function startGame() { // initial key press to start the game
         }
     }
 
-    console.log("the hangManWord is: " + hangManWord);
-    console.log("length of word is: " + hangManWord.length); 
-
-    console.log("the solvedWord is: " + solvedWord);
-    console.log("length of word is: " + solvedWord.length);  
-
 } // end document.onkeyup = function(event) {
 
 function guessWord() {
@@ -159,15 +165,10 @@ function guessWord() {
         repeatedLetterSnd.play();
 
         html = "<P>" + repeatedLetterStr + letter.toUpperCase() + " ." + "</p>";
-        document.querySelector("#guessedLetterRepeated").innerHTML = html;
-        console.log("you already tried this letter.");
+        document.querySelector("#multiPurposeText").innerHTML = html;
     } else {
         // add this letter to the letterGuessed array
         lettersGuessed.push(letter.toLowerCase());
-
-        // clear #guessedLetterRepeated
-        html = "";
-        document.querySelector("#guessedLetterRepeated").innerHTML = html;
         
         // does the letter exist in the hangManWord?
         var indices = [];
@@ -205,6 +206,7 @@ function guessWord() {
     }
 }
 
+// return string of size length with a character
 function fillString(withChar, length) {
     var myString ="";
    
@@ -260,6 +262,51 @@ function updateWebPage() {
     document.querySelector("#lettersGuessed").innerHTML = html;
 }
 
+// Below I was attempting to animate the title of my webpage
+// at the suggestion of my daughter by alternating the colors 
+// of the letters in the title when the player won.  I thought it
+// was a good idea and attempted to implement it.  However, the code
+// executes to fast to visually see a change in the colors.  I couldn't
+// find a sleep() or delay() function in javascript, instead I found 
+// several customized sleep() functions that developers had suggested, 
+// but it seems to block updates to the page in between sleeps(). So I 
+// ave up on this endeavor.  Sorry I had to disappoint my daughter.
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+      if ((new Date().getTime() - start) > milliseconds){
+        break;
+      }
+    }
+}
+
+// this function will alternate the colors of each letter
+// in the HangMan Title
+function animateTitle() {
+    for (var i = 0; i < 1000; i++) {
+        for(var j = 0; j < hangManTitleIds.length - 2; j++) {
+            var elem = document.getElementById(hangManTitleIds[j]);
+            var theCSSprop = window.getComputedStyle(elem, null).getPropertyValue("color");
+            console.log("j = " + j + " color = " + theCSSprop);
+
+            if (theCSSprop === rgbColorRed) {
+                // make it white
+                elem.style.color = rgbColorWhite;
+            } else if (theCSSprop === rgbColorWhite) {
+                // make it blue
+                elem.style.color = rgbColorBlue;
+            } else if (theCSSprop === rgbColorBlue) {
+                // make it red
+                elem.style.color = rgbColorRed;
+            } else {
+                // do nothing
+            }
+            sleep(1);
+        }
+    }  
+}
+
+
 // The following hangman code was taken from CodePen and modified for
 // my own use.  Original author is Cathy Dutton. 
 
@@ -275,13 +322,13 @@ canvas =  function(){
     context = myStickman.getContext('2d');
     context.clearRect(0, 0, 400, 400);
     context.beginPath();
-    context.strokeStyle = "#fff";
     context.lineWidth = 2;
-};
+}
 
 head = function(){
     myStickman = document.getElementById("stickman");
     context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     context.beginPath();
     context.arc(60, 25, 10, 0, Math.PI*2, true);
     context.stroke();
@@ -294,41 +341,127 @@ draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
 }
 
 frame1 = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorWhite;
     draw (0, 120, 120, 120);
 };
 
 frame2 = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorWhite;
     draw (10, 0, 10, 120);
 };
 
 frame3 = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorWhite;
     draw (0, 5, 70, 5);
 };
 
 frame4 = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorWhite;
     draw (60, 5, 60, 15);
 };
 
 torso = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     draw (60, 36, 60, 70);
 };
 
 rightArm = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     draw (60, 46, 100, 50);
 };
 
 leftArm = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     draw (60, 46, 20, 50);
 };
 
 rightLeg = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     draw (60, 70, 100, 100);
 };
 
 leftLeg = function() {
+    context = myStickman.getContext('2d');
+    context.strokeStyle = rgbColorRed;
     draw (60, 70, 20, 100);
 };
 
 // hangman parts
 var drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head, frame4, frame3, frame2, frame1]; 
     
+/*
+var car = {
+    make: "Honda",
+    model: "Fit",
+    color: "Blue Raspberry",
+    mileage: 3000,
+    isWorking: true,
+    animate: function() {
+        var drawMe = guessesRemaining;
+        drawArray[drawMe]();
+    },
+    canvas: function(){
+        myStickman = document.getElementById("stickman");
+        context = myStickman.getContext('2d');
+        context.clearRect(0, 0, 400, 400);
+        context.beginPath();
+        context.strokeStyle = "#fff";
+        context.lineWidth = 2;
+    },
+    head: function() {
+        myStickman = document.getElementById("stickman");
+        context = myStickman.getContext('2d');
+        context.beginPath();
+        context.arc(60, 25, 10, 0, Math.PI*2, true);
+        context.stroke();
+    },
+    draw: function($pathFromx, $pathFromy, $pathTox, $pathToy) {
+        context.moveTo($pathFromx, $pathFromy);
+        context.lineTo($pathTox, $pathToy);
+        context.stroke(); 
+    },
+    frame1: function() {
+        draw (0, 120, 120, 120);
+    },
+    
+    frame2: function() {
+        draw (10, 0, 10, 120);
+    },
+    
+    frame3: function() {
+        draw (0, 5, 70, 5);
+    },
+    
+    frame4: function() {
+        draw (60, 5, 60, 15);
+    },
+    
+    torso: function() {
+        draw (60, 36, 60, 70);
+    },
+    
+    rightArm: function() {
+        draw (60, 46, 100, 50);
+    },
+    
+    leftArm: function() {
+        draw (60, 46, 20, 50);
+    },
+    
+    rightLeg: function() {
+        draw (60, 70, 100, 100);
+    },
+    
+    leftLeg: function() {
+        draw (60, 70, 20, 100);
+    }
+
+  }; */
