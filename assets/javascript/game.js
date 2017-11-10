@@ -20,10 +20,6 @@
     "Virginia", "Washington", "West Virginia", "Wisconsin","Wyoming"
 ];
 
-var hangManTitleIds = [ // ids for each letter in HangMan title in html document
-    "h","a1","n1","g","m","a2","n3","dash","s1","t1","a3","t2","a4","s2" 
-];
-
 // RGB settings for Red, White and Blue
 var rgbColorRed = "rgb(255, 0, 0)";
 var rgbColorWhite = "rgb(255, 255, 255)";
@@ -34,10 +30,10 @@ var winCount = 0;
 var letter;
 var solved; // the user guessed the word before exhausting number of guesse
 var guessesRemaining;
-var hangManWord;
-var solvedWord = "";
+var hangManWord; // this is the word the user has to guess
+var solvedWord = ""; // this string will keep track of what letters the user guessed
 var gameStarted = false;
-var lettersGuessed = [];
+var lettersGuessed = []; // this will keep track of which letters the user has guessed
 var underScore = "_";
 var space = " ";
 var html = "";
@@ -65,32 +61,32 @@ document.onkeyup = function (event) {
 
     if (gameStarted === false) {
         startGame();
-        canvas();
+        canvas(); // setup the hangman drawing canvas
         console.log("Starting New Game");
     } else {
         // clear the multiPurposeText area
         html = "<P>" + "</p>";
         document.querySelector("#multiPurposeText").innerHTML = html;
 
-        // test of keypress is alphabetic
+        // test if keypress is alphabetic (a - z or A - Z)
         if ((event.keyCode >= 65) && (event.keyCode <= 90) || 
             (event.keyCode >= 97) && (event.keyCode <= 122)) 
         {
             // the key pressed was alphabetic        
             guessWord();
         } else {
-            // the keypress was not alphabetic
+            // the keypress was not alphabetic, warn the user but don't count it against them
             html = "<P>" + notLetterStr + "</p>";
             document.querySelector("#multiPurposeText").innerHTML = html;
         }
     }
-    updateWebPage();
-    var snd;
+    updateWebPage(); // update some the web page elements
 
     // has the user exhausted guessesRemaining or
     // solved the word?
     if ((solved) || (guessesRemaining === 0)) {
         if (solved) {
+            // notify the user they solved the word and prompt them to start a new game
             html = "<P style='color:blue;font-weight: bolder;'>" + youWonStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
             document.querySelector("#multiPurposeText").innerHTML = html;
@@ -98,12 +94,10 @@ document.onkeyup = function (event) {
             // play a sound
             youWinSnd.play();
             console.log("you Won");
-            // increment wins by 1 and
+            // increment wins by 1
             winCount++;
-
-            // animate the Title
-           // animateTitle();
-        } else { // guessesRemain equals 0
+        } else { // since the puzzle was not solved then guessesRemaining must equal 0
+            // notify the user that they lost and prompt to start a new game
             html = "<P style='color:red;font-weight:bolder;'>" + youLostStr.toUpperCase() + "</p>";
             html += "<p>" + startGameStr + "</p>";
             document.querySelector("#multiPurposeText").innerHTML = html;
@@ -158,16 +152,17 @@ function guessWord() {
    
     console.log("You guessed the letter: " + letter);
     
-    // if letter has already been used don't count it
+    // if letter has already been used don't count it against the user
     pos = lettersGuessed.indexOf(letter.toLowerCase());
     if (pos !== -1) {
+        //user has used this letter before
         //play a sound
         repeatedLetterSnd.play();
 
         html = "<P>" + repeatedLetterStr + letter.toUpperCase() + " ." + "</p>";
         document.querySelector("#multiPurposeText").innerHTML = html;
     } else {
-        // add this letter to the letterGuessed array
+        // add this letter to the lettersGuessed array
         lettersGuessed.push(letter.toLowerCase());
         
         // does the letter exist in the hangManWord?
@@ -201,12 +196,14 @@ function guessWord() {
             console.log("not found");
             // letter was not found, decrement guessesRemaining by 1
             guessesRemaining -= 1;
-            animate();
+
+            // draw a piece of the hangMan
+            drawHangManPart();
         }
     }
 }
 
-// return string of size length with a character
+// return string of size length, filled with a the specified character
 function fillString(withChar, length) {
     var myString ="";
    
@@ -218,8 +215,8 @@ function fillString(withChar, length) {
 }
 
 // the following code snippet taken from StackOverflow.com
-// will set the character chr at the index in the string str
-// and return str
+// will set the character 'chr' at the specified 'index' in the string 'str'
+// and return string 'str' modified
 function setCharAt(str,index,chr) {
     if(index > str.length-1) return str;
     return str.substr(0,index) + chr + str.substr(index+1);
@@ -229,13 +226,13 @@ function setCharAt(str,index,chr) {
 function updateWebPage() {
     
     console.log("solvedWord.length: " + solvedWord.length);
-    // display the parts of the solved the user guessed so far
-    html = "<pre>"; // open tag - need to use <pre>, otherwise white space is collapsed
+    // display the parts of the solved word that the user has guessed so far
+    html = "<pre>"; // open tag - need to use <pre> tag, otherwise white space is collapsed
     for (var i = 0; i < solvedWord.length; i++) {
         if ( i === 0 ) { // first letter of word
-            html += solvedWord.charAt(i).toUpperCase() + space;
-        } else if (solvedWord.charAt(i) != space) { // letter between first and last in word
-            html += solvedWord.charAt(i).toUpperCase() + space;   
+            html += solvedWord.charAt(i).toUpperCase() + space; // append a space after first letter
+        } else if (solvedWord.charAt(i) != space) { // letter between first and last letter in word
+            html += solvedWord.charAt(i).toUpperCase() + space; // append a space after the letter
         } else { // this is a natural space in the word, add additional space for display
             html += space + solvedWord.charAt(i).toUpperCase();
             console.log("found a space");
@@ -245,7 +242,7 @@ function updateWebPage() {
     document.querySelector("#currentWord").innerHTML = html;
     console.log("html: " + html);
 
-    // update win count
+    // update the win count
     html = "<p>" + "Wins: " + winCount + "</p>";
     document.querySelector("#winCount").innerHTML = html;
 
@@ -262,61 +259,17 @@ function updateWebPage() {
     document.querySelector("#lettersGuessed").innerHTML = html;
 }
 
-// Below I was attempting to animate the title of my webpage
-// at the suggestion of my daughter by alternating the colors 
-// of the letters in the title when the player won.  I thought it
-// was a good idea and attempted to implement it.  However, the code
-// executes to fast to visually see a change in the colors.  I couldn't
-// find a sleep() or delay() function in javascript, instead I found 
-// several customized sleep() functions that developers had suggested, 
-// but it seems to block updates to the page in between sleeps(). So I 
-// ave up on this endeavor.  Sorry I had to disappoint my daughter.
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-      }
-    }
-}
-
-// this function will alternate the colors of each letter
-// in the HangMan Title
-function animateTitle() {
-    for (var i = 0; i < 1000; i++) {
-        for(var j = 0; j < hangManTitleIds.length - 2; j++) {
-            var elem = document.getElementById(hangManTitleIds[j]);
-            var theCSSprop = window.getComputedStyle(elem, null).getPropertyValue("color");
-            console.log("j = " + j + " color = " + theCSSprop);
-
-            if (theCSSprop === rgbColorRed) {
-                // make it white
-                elem.style.color = rgbColorWhite;
-            } else if (theCSSprop === rgbColorWhite) {
-                // make it blue
-                elem.style.color = rgbColorBlue;
-            } else if (theCSSprop === rgbColorBlue) {
-                // make it red
-                elem.style.color = rgbColorRed;
-            } else {
-                // do nothing
-            }
-            sleep(1);
-        }
-    }  
-}
-
 
 // The following hangman code was taken from CodePen and modified for
 // my own use.  Original author is Cathy Dutton. 
 
-// draw hangman
-var animate = function () {
+// draw hangman part
+var drawHangManPart = function () {
     var drawMe = guessesRemaining;
     drawArray[drawMe]();
 }
 
-// Hangman
+// Hangman canvas
 canvas =  function(){
     myStickman = document.getElementById("stickman");
     context = myStickman.getContext('2d');
@@ -396,72 +349,3 @@ leftLeg = function() {
 
 // hangman parts
 var drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head, frame4, frame3, frame2, frame1]; 
-    
-/*
-var car = {
-    make: "Honda",
-    model: "Fit",
-    color: "Blue Raspberry",
-    mileage: 3000,
-    isWorking: true,
-    animate: function() {
-        var drawMe = guessesRemaining;
-        drawArray[drawMe]();
-    },
-    canvas: function(){
-        myStickman = document.getElementById("stickman");
-        context = myStickman.getContext('2d');
-        context.clearRect(0, 0, 400, 400);
-        context.beginPath();
-        context.strokeStyle = "#fff";
-        context.lineWidth = 2;
-    },
-    head: function() {
-        myStickman = document.getElementById("stickman");
-        context = myStickman.getContext('2d');
-        context.beginPath();
-        context.arc(60, 25, 10, 0, Math.PI*2, true);
-        context.stroke();
-    },
-    draw: function($pathFromx, $pathFromy, $pathTox, $pathToy) {
-        context.moveTo($pathFromx, $pathFromy);
-        context.lineTo($pathTox, $pathToy);
-        context.stroke(); 
-    },
-    frame1: function() {
-        draw (0, 120, 120, 120);
-    },
-    
-    frame2: function() {
-        draw (10, 0, 10, 120);
-    },
-    
-    frame3: function() {
-        draw (0, 5, 70, 5);
-    },
-    
-    frame4: function() {
-        draw (60, 5, 60, 15);
-    },
-    
-    torso: function() {
-        draw (60, 36, 60, 70);
-    },
-    
-    rightArm: function() {
-        draw (60, 46, 100, 50);
-    },
-    
-    leftArm: function() {
-        draw (60, 46, 20, 50);
-    },
-    
-    rightLeg: function() {
-        draw (60, 70, 100, 100);
-    },
-    
-    leftLeg: function() {
-        draw (60, 70, 20, 100);
-    }
-
-  }; */
